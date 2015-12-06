@@ -2,9 +2,7 @@ package pickjson
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
-	"reflect"
 )
 
 func processToken(reader io.Reader, key string, hook func(*json.Decoder) bool) {
@@ -22,7 +20,6 @@ func processToken(reader io.Reader, key string, hook func(*json.Decoder) bool) {
 
 		// skip the error token
 		if err != nil {
-			fmt.Println("ERR", err)
 			break
 		}
 
@@ -58,9 +55,7 @@ func PickString(reader io.Reader, key string, limit int) (res []string) {
 			return false
 		}
 
-		if reflect.TypeOf(token).String() == "string" {
-			tokenStr, _ := token.(string)
-
+		if tokenStr, ok := token.(string); ok {
 			res = append(res, tokenStr)
 
 			if limit > 0 && len(res) >= limit {
@@ -83,9 +78,7 @@ func PickBool(reader io.Reader, key string, limit int) (res []bool) {
 			return false
 		}
 
-		if reflect.TypeOf(token).String() == "bool" {
-			tokenStr, _ := token.(bool)
-
+		if tokenStr, ok := token.(bool); ok {
 			res = append(res, tokenStr)
 
 			if limit > 0 && len(res) >= limit {
@@ -108,9 +101,7 @@ func PickNumber(reader io.Reader, key string, limit int) (res []float64) {
 			return false
 		}
 
-		if reflect.TypeOf(token).String() == "float64" {
-			tokenStr, _ := token.(float64)
-
+		if tokenStr, ok := token.(float64); ok {
 			res = append(res, tokenStr)
 
 			if limit > 0 && len(res) >= limit {

@@ -76,6 +76,10 @@ const (
             }, {
                 "id": "About",
                 "label": "About Adobe CVG Viewer..."
+            }, {
+                "id": "About 2",
+                "label": 1,
+                "ok": "false"
             }
         ]
     },
@@ -88,10 +92,25 @@ const (
     }
 }
 `
-	JSON_SAMPLE_INVALID = `
+	// still works
+	JSON_SAMPLE_INCOMPLETE = `
 {
-    "label": 
+    "label": "from incomplete sample"
 `
+
+	// still works
+	JSON_SAMPLE_INCOMPLETE_OBJECT = `
+{
+    "image": { 
+        "src": "Images/Sun2.png",
+        "name": "sun2",
+        "hOffset": 250,
+        "vOffset": 250,
+        "alignment": "center"
+    },
+    asdasd asd wqeqw eqe qsad
+`
+
 	JSON_SAMPLE_ARRAY = `
 [
     {
@@ -154,6 +173,12 @@ const (
     }
 ]
 `
+
+	JSON_SAMPLE_INVALID_KEY = `
+{
+    label: "from incomplete sample"
+}
+`
 )
 
 type Image struct {
@@ -184,6 +209,22 @@ func TestPickStringLimit(t *testing.T) {
 	res := PickString(strings.NewReader(JSON_SAMPLE), "label", 5)
 
 	if len(res) != 5 {
+		t.Error()
+	}
+}
+
+func TestPickStringIncomplete(t *testing.T) {
+	res := PickString(strings.NewReader(JSON_SAMPLE_INCOMPLETE), "label", 0)
+
+	if len(res) != 1 {
+		t.Error()
+	}
+}
+
+func TestPickStringArray(t *testing.T) {
+	res := PickString(strings.NewReader(JSON_SAMPLE_ARRAY), "label", 0)
+
+	if len(res) != 12 {
 		t.Error()
 	}
 }
@@ -235,7 +276,23 @@ func TestPickObject(t *testing.T) {
 	}
 }
 
-func TestPickStringEmpty(t *testing.T) {
+func TestPickObjectIncomplete(t *testing.T) {
+	var image Image
+
+	err := PickObject(strings.NewReader(JSON_SAMPLE_INCOMPLETE_OBJECT), "image", &image)
+
+	if err != nil {
+		t.Error()
+	}
+
+	// empty struct
+	if image == (Image{}) {
+		t.Error()
+	}
+}
+
+/////////////////////////////// FAIL TEST ////////////////////////////////
+func TestEmptyPickString(t *testing.T) {
 	res := PickString(strings.NewReader(""), "label", 0)
 
 	if len(res) != 0 {
@@ -243,23 +300,7 @@ func TestPickStringEmpty(t *testing.T) {
 	}
 }
 
-func TestPickStringInvalid(t *testing.T) {
-	res := PickString(strings.NewReader(JSON_SAMPLE_INVALID), "label", 0)
-
-	if len(res) != 0 {
-		t.Error()
-	}
-}
-
-func TestPickStringArray(t *testing.T) {
-	res := PickString(strings.NewReader(JSON_SAMPLE_ARRAY), "label", 0)
-
-	if len(res) != 12 {
-		t.Error()
-	}
-}
-
-func TestPickObjectEmpty(t *testing.T) {
+func TestEmptyPickObject(t *testing.T) {
 	var image Image
 
 	err := PickObject(strings.NewReader(""), "image", &image)
@@ -274,23 +315,17 @@ func TestPickObjectEmpty(t *testing.T) {
 	}
 }
 
-func TestPickObjectInvalid(t *testing.T) {
-	var image Image
+func TestInvalidKeyPickString(t *testing.T) {
+	res := PickString(strings.NewReader(JSON_SAMPLE_INVALID_KEY), "label", 0)
 
-	err := PickObject(strings.NewReader(JSON_SAMPLE_INVALID), "image", &image)
-
-	if err != nil {
-		t.Error()
-	}
-
-	// empty struct
-	if image != (Image{}) {
+	if len(res) != 0 {
 		t.Error()
 	}
 }
 
-// w/ HTTP
+/////////////////////////////// FAIL TEST ////////////////////////////////
 
+/////////////////////////////// HTTP ////////////////////////////////
 func TestPickHttpString(t *testing.T) {
 	resp, err := request.New().Request(&request.Option{
 		Url: "https://httpbin.org/get",
@@ -359,3 +394,5 @@ func TestPickHttpObject(t *testing.T) {
 		t.Error()
 	}
 }
+
+/////////////////////////////// HTTP ////////////////////////////////
