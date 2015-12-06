@@ -10,6 +10,7 @@ import (
 const (
 	JSON_SAMPLE = `
 {   
+    "benchmark": "benchmark text 1",
     "menu": {
         "header": "SVG Viewer",
         "image": { 
@@ -89,7 +90,8 @@ const (
         "hOffset": 250,
         "vOffset": 250,
         "alignment": "center"
-    }
+    },
+    "benchmark": "benchmark text 2"
 }
 `
 	// still works
