@@ -18,7 +18,7 @@ func processToken(reader io.Reader, key string, hook func(*json.Decoder) bool) {
 			break
 		}
 
-		// skip the error token
+		// stop on error
 		if err != nil {
 			break
 		}
