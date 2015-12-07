@@ -18,7 +18,7 @@ pick-json [![Build Status][semaphoreci-img]][semaphoreci-url] [![Doc][godoc-img]
 
 ## Fast? How?
 
-* process json as stream.
+* read json as stream.
 * stop when found.
 * and you can also set the limit.
 

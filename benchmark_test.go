@@ -77,7 +77,7 @@ func BenchmarkJasonSimple(B *testing.B) {
 	}
 }
 
-func BenchmarkNestedPickString(B *testing.B) {
+func BenchmarkPickNested(B *testing.B) {
 	for n := 0; n < B.N; n++ {
 		nestedBenchmark := PickString(strings.NewReader(JSON_SAMPLE_BENCHMARK), "nested_benchmark", 1)
 
@@ -87,7 +87,7 @@ func BenchmarkNestedPickString(B *testing.B) {
 	}
 }
 
-func BenchmarkNestedJasonString(B *testing.B) {
+func BenchmarkJasonNested(B *testing.B) {
 	for n := 0; n < B.N; n++ {
 		j, _ := jason.NewObjectFromReader(strings.NewReader(JSON_SAMPLE_BENCHMARK))
 
@@ -99,7 +99,7 @@ func BenchmarkNestedJasonString(B *testing.B) {
 	}
 }
 
-func BenchmarkArrayPickString(B *testing.B) {
+func BenchmarkPickArray(B *testing.B) {
 	for n := 0; n < B.N; n++ {
 		id := PickString(strings.NewReader(JSON_SAMPLE_BENCHMARK), "ID", 0)
 
@@ -109,7 +109,7 @@ func BenchmarkArrayPickString(B *testing.B) {
 	}
 }
 
-func BenchmarkArrayJasonString(B *testing.B) {
+func BenchmarkJasonArray(B *testing.B) {
 	for n := 0; n < B.N; n++ {
 		j, _ := jason.NewObjectFromReader(strings.NewReader(JSON_SAMPLE_BENCHMARK))
 
@@ -128,11 +128,10 @@ func BenchmarkArrayJasonString(B *testing.B) {
 				return
 			}
 		}
-
 	}
 }
 
-func BenchmarkNestedArrayPickString(B *testing.B) {
+func BenchmarkPickNestedArray(B *testing.B) {
 	for n := 0; n < B.N; n++ {
 		id := PickString(strings.NewReader(JSON_SAMPLE_BENCHMARK), "link", 0)
 
@@ -142,7 +141,7 @@ func BenchmarkNestedArrayPickString(B *testing.B) {
 	}
 }
 
-func BenchmarkNestedArrayJasonString(B *testing.B) {
+func BenchmarkJasonNestedArray(B *testing.B) {
 	for n := 0; n < B.N; n++ {
 		j, _ := jason.NewObjectFromReader(strings.NewReader(JSON_SAMPLE_BENCHMARK))
 
