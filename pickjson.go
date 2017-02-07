@@ -8,6 +8,13 @@ import (
 func processToken(reader io.Reader, key string, hook func(*json.Decoder) bool) {
 	decoder := json.NewDecoder(reader)
 
+	// if empty key -> hook the whole decoder
+	// only for #PickObject root object
+	if key == "" {
+		hook(decoder)
+		return
+	}
+
 	isKey := true
 
 	for {
