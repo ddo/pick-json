@@ -46,9 +46,9 @@ func ExamplePickBool() {
 
 // pick object
 func ExamplePickObject() {
-	var image Image
+	var img image
 
-	PickObject(strings.NewReader(jsonExample), "image", &image)
-	fmt.Println(image)
+	PickObject(strings.NewReader(jsonExample), "image", &img)
+	fmt.Println(img)
 	// Output: {Images/Sun.png sun1 250 250 center}
 }
