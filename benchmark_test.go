@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	JSON_SAMPLE_BENCHMARK = `
+	jsonSampleBenchmark = `
 {
     "benchmark": "benchmark text 1",
     "nested": {
@@ -56,8 +56,7 @@ const (
 
 func BenchmarkPickSimple(B *testing.B) {
 	for n := 0; n < B.N; n++ {
-		benchmark := PickString(strings.NewReader(JSON_SAMPLE_BENCHMARK), "benchmark", 1)
-
+		benchmark := PickString(strings.NewReader(jsonSampleBenchmark), "benchmark", 1)
 		if len(benchmark) == 0 {
 			fmt.Println(benchmark)
 		}
@@ -67,10 +66,9 @@ func BenchmarkPickSimple(B *testing.B) {
 // jason get from the the bottom up
 func BenchmarkJasonSimple(B *testing.B) {
 	for n := 0; n < B.N; n++ {
-		j, _ := jason.NewObjectFromReader(strings.NewReader(JSON_SAMPLE_BENCHMARK))
+		j, _ := jason.NewObjectFromReader(strings.NewReader(jsonSampleBenchmark))
 
 		benchmark, err := j.GetString("benchmark")
-
 		if err != nil {
 			fmt.Println(err, benchmark)
 		}
@@ -79,8 +77,7 @@ func BenchmarkJasonSimple(B *testing.B) {
 
 func BenchmarkPickNested(B *testing.B) {
 	for n := 0; n < B.N; n++ {
-		nestedBenchmark := PickString(strings.NewReader(JSON_SAMPLE_BENCHMARK), "nested_benchmark", 1)
-
+		nestedBenchmark := PickString(strings.NewReader(jsonSampleBenchmark), "nested_benchmark", 1)
 		if len(nestedBenchmark) == 0 {
 			fmt.Println(nestedBenchmark)
 		}
@@ -89,10 +86,9 @@ func BenchmarkPickNested(B *testing.B) {
 
 func BenchmarkJasonNested(B *testing.B) {
 	for n := 0; n < B.N; n++ {
-		j, _ := jason.NewObjectFromReader(strings.NewReader(JSON_SAMPLE_BENCHMARK))
+		j, _ := jason.NewObjectFromReader(strings.NewReader(jsonSampleBenchmark))
 
 		nestedBenchmark, err := j.GetString("nested", "nested_benchmark")
-
 		if err != nil {
 			fmt.Println(err, nestedBenchmark)
 		}
@@ -101,8 +97,7 @@ func BenchmarkJasonNested(B *testing.B) {
 
 func BenchmarkPickArray(B *testing.B) {
 	for n := 0; n < B.N; n++ {
-		id := PickString(strings.NewReader(JSON_SAMPLE_BENCHMARK), "ID", 0)
-
+		id := PickString(strings.NewReader(jsonSampleBenchmark), "ID", 0)
 		if len(id) == 0 {
 			fmt.Println(id)
 		}
@@ -111,10 +106,9 @@ func BenchmarkPickArray(B *testing.B) {
 
 func BenchmarkJasonArray(B *testing.B) {
 	for n := 0; n < B.N; n++ {
-		j, _ := jason.NewObjectFromReader(strings.NewReader(JSON_SAMPLE_BENCHMARK))
+		j, _ := jason.NewObjectFromReader(strings.NewReader(jsonSampleBenchmark))
 
 		dataArray, err := j.GetObjectArray("data")
-
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -122,7 +116,6 @@ func BenchmarkJasonArray(B *testing.B) {
 
 		for _, dataItem := range dataArray {
 			id, err := dataItem.GetString("ID")
-
 			if err != nil {
 				fmt.Println(err, id)
 				return
@@ -133,8 +126,7 @@ func BenchmarkJasonArray(B *testing.B) {
 
 func BenchmarkPickNestedArray(B *testing.B) {
 	for n := 0; n < B.N; n++ {
-		id := PickString(strings.NewReader(JSON_SAMPLE_BENCHMARK), "link", 0)
-
+		id := PickString(strings.NewReader(jsonSampleBenchmark), "link", 0)
 		if len(id) == 0 {
 			fmt.Println(id)
 		}
@@ -143,10 +135,9 @@ func BenchmarkPickNestedArray(B *testing.B) {
 
 func BenchmarkJasonNestedArray(B *testing.B) {
 	for n := 0; n < B.N; n++ {
-		j, _ := jason.NewObjectFromReader(strings.NewReader(JSON_SAMPLE_BENCHMARK))
+		j, _ := jason.NewObjectFromReader(strings.NewReader(jsonSampleBenchmark))
 
 		dataArray, err := j.GetObjectArray("data")
-
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -154,7 +145,6 @@ func BenchmarkJasonNestedArray(B *testing.B) {
 
 		for _, dataItem := range dataArray {
 			actionArray, err := dataItem.GetObjectArray("actions")
-
 			if err != nil {
 				fmt.Println(err)
 				return
@@ -162,7 +152,6 @@ func BenchmarkJasonNestedArray(B *testing.B) {
 
 			for _, actionItem := range actionArray {
 				link, err := actionItem.GetString("link")
-
 				if err != nil {
 					fmt.Println(err, link)
 					return

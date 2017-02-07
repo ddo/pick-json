@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	JSON_SAMPLE = `
+	jsonSample = `
 {   
     "benchmark": "benchmark text 1",
     "menu": {
@@ -95,13 +95,13 @@ const (
 }
 `
 	// still works
-	JSON_SAMPLE_INCOMPLETE = `
+	jsonSampleIncomplete = `
 {
     "label": "from incomplete sample"
 `
 
 	// still works
-	JSON_SAMPLE_INCOMPLETE_OBJECT = `
+	jsonSampleIncompleteObject = `
 {
     "image": { 
         "src": "Images/Sun2.png",
@@ -113,7 +113,7 @@ const (
     asdasd asd wqeqw eqe qsad
 `
 
-	JSON_SAMPLE_ARRAY = `
+	jsonSampleArr = `
 [
     {
         "id": 1
@@ -176,7 +176,7 @@ const (
 ]
 `
 
-	JSON_SAMPLE_INVALID_KEY = `
+	jsonSampleInvalidKey = `
 {
     label: "from incomplete sample"
 }
@@ -200,64 +200,56 @@ type Headers struct {
 }
 
 func TestPickString(t *testing.T) {
-	res := PickString(strings.NewReader(JSON_SAMPLE), "label", 0)
-
+	res := PickString(strings.NewReader(jsonSample), "label", 0)
 	if len(res) != 12 {
 		t.Error()
 	}
 }
 
 func TestPickStringLimit(t *testing.T) {
-	res := PickString(strings.NewReader(JSON_SAMPLE), "label", 5)
-
+	res := PickString(strings.NewReader(jsonSample), "label", 5)
 	if len(res) != 5 {
 		t.Error()
 	}
 }
 
 func TestPickStringIncomplete(t *testing.T) {
-	res := PickString(strings.NewReader(JSON_SAMPLE_INCOMPLETE), "label", 0)
-
+	res := PickString(strings.NewReader(jsonSampleIncomplete), "label", 0)
 	if len(res) != 1 {
 		t.Error()
 	}
 }
 
 func TestPickStringArray(t *testing.T) {
-	res := PickString(strings.NewReader(JSON_SAMPLE_ARRAY), "label", 0)
-
+	res := PickString(strings.NewReader(jsonSampleArr), "label", 0)
 	if len(res) != 12 {
 		t.Error()
 	}
 }
 
 func TestPickBool(t *testing.T) {
-	res := PickBool(strings.NewReader(JSON_SAMPLE), "ok", -1)
-
+	res := PickBool(strings.NewReader(jsonSample), "ok", -1)
 	if len(res) != 5 {
 		t.Error()
 	}
 }
 
 func TestPickBoolLimit(t *testing.T) {
-	res := PickBool(strings.NewReader(JSON_SAMPLE), "ok", 2)
-
+	res := PickBool(strings.NewReader(jsonSample), "ok", 2)
 	if len(res) != 2 {
 		t.Error()
 	}
 }
 
 func TestPickNumber(t *testing.T) {
-	res := PickNumber(strings.NewReader(JSON_SAMPLE), "id", 0)
-
+	res := PickNumber(strings.NewReader(jsonSample), "id", 0)
 	if len(res) != 16 {
 		t.Error()
 	}
 }
 
 func TestPickNumberLimit(t *testing.T) {
-	res := PickNumber(strings.NewReader(JSON_SAMPLE), "id", 10)
-
+	res := PickNumber(strings.NewReader(jsonSample), "id", 10)
 	if len(res) != 10 {
 		t.Error()
 	}
@@ -266,8 +258,7 @@ func TestPickNumberLimit(t *testing.T) {
 func TestPickObject(t *testing.T) {
 	var image Image
 
-	err := PickObject(strings.NewReader(JSON_SAMPLE), "image", &image)
-
+	err := PickObject(strings.NewReader(jsonSample), "image", &image)
 	if err != nil {
 		t.Error()
 	}
@@ -281,8 +272,7 @@ func TestPickObject(t *testing.T) {
 func TestPickObjectIncomplete(t *testing.T) {
 	var image Image
 
-	err := PickObject(strings.NewReader(JSON_SAMPLE_INCOMPLETE_OBJECT), "image", &image)
-
+	err := PickObject(strings.NewReader(jsonSampleIncompleteObject), "image", &image)
 	if err != nil {
 		t.Error()
 	}
@@ -296,7 +286,6 @@ func TestPickObjectIncomplete(t *testing.T) {
 /////////////////////////////// FAIL TEST ////////////////////////////////
 func TestEmptyPickString(t *testing.T) {
 	res := PickString(strings.NewReader(""), "label", 0)
-
 	if len(res) != 0 {
 		t.Error()
 	}
@@ -306,7 +295,6 @@ func TestEmptyPickObject(t *testing.T) {
 	var image Image
 
 	err := PickObject(strings.NewReader(""), "image", &image)
-
 	if err != nil {
 		t.Error()
 	}
@@ -318,8 +306,7 @@ func TestEmptyPickObject(t *testing.T) {
 }
 
 func TestInvalidKeyPickString(t *testing.T) {
-	res := PickString(strings.NewReader(JSON_SAMPLE_INVALID_KEY), "label", 0)
-
+	res := PickString(strings.NewReader(jsonSampleInvalidKey), "label", 0)
 	if len(res) != 0 {
 		t.Error()
 	}
@@ -332,15 +319,12 @@ func TestPickHttpString(t *testing.T) {
 	resp, err := request.New().Request(&request.Option{
 		Url: "https://httpbin.org/get",
 	})
-
 	if err != nil {
 		panic(err)
 	}
-
 	defer resp.Body.Close()
 
 	res := PickString(resp.Body, "Host", 0)
-
 	if len(res) == 0 {
 		t.Error()
 	}
@@ -354,15 +338,12 @@ func TestPickHttpBool(t *testing.T) {
 	resp, err := request.New().Request(&request.Option{
 		Url: "http://httpbin.org/gzip",
 	})
-
 	if err != nil {
 		panic(err)
 	}
-
 	defer resp.Body.Close()
 
 	res := PickBool(resp.Body, "gzipped", 0)
-
 	if len(res) == 0 {
 		t.Error()
 	}
@@ -376,17 +357,14 @@ func TestPickHttpObject(t *testing.T) {
 	resp, err := request.New().Request(&request.Option{
 		Url: "http://httpbin.org/get",
 	})
-
 	if err != nil {
 		panic(err)
 	}
-
 	defer resp.Body.Close()
 
 	var headers Headers
 
 	err = PickObject(resp.Body, "headers", &headers)
-
 	if err != nil {
 		t.Error()
 	}
