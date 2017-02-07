@@ -126,6 +126,7 @@ func PickNumber(reader io.Reader, key string, limit int) (res []float64) {
 
 // PickObject pick struct by key
 // there is no limit for PickObject yet :(
+// TODO: add limit
 func PickObject(reader io.Reader, key string, object interface{}) (err error) {
 	processToken(reader, key, func(decoder *json.Decoder) bool {
 		err = decoder.Decode(object)

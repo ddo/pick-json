@@ -81,6 +81,6 @@ type Image struct {
 
 var image Image
 
-PickObject(strings.NewReader(JSON_EXAMPLE), "image", &image)
+err := PickObject(strings.NewReader(JSON_EXAMPLE), "image", &image)
 // {Images/Sun.png sun1 250 250 center}
 ```
