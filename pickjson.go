@@ -45,6 +45,7 @@ func processToken(reader io.Reader, key string, hook func(*json.Decoder) bool) {
 	return
 }
 
+// PickString pick String by key, return empty array if there is no matching key or error
 func PickString(reader io.Reader, key string, limit int) (res []string) {
 	processToken(reader, key, func(decoder *json.Decoder) bool {
 		// matched token
@@ -68,6 +69,7 @@ func PickString(reader io.Reader, key string, limit int) (res []string) {
 	return
 }
 
+// PickBool pick Bool by key, return empty array if there is no matching key or error
 func PickBool(reader io.Reader, key string, limit int) (res []bool) {
 	processToken(reader, key, func(decoder *json.Decoder) bool {
 		// matched token
@@ -91,6 +93,7 @@ func PickBool(reader io.Reader, key string, limit int) (res []bool) {
 	return
 }
 
+// PickNumber pick Float64 by key, return empty array if there is no matching key or error
 func PickNumber(reader io.Reader, key string, limit int) (res []float64) {
 	processToken(reader, key, func(decoder *json.Decoder) bool {
 		// matched token
@@ -114,6 +117,7 @@ func PickNumber(reader io.Reader, key string, limit int) (res []float64) {
 	return
 }
 
+// PickObject pick struct by key
 // there is no limit for PickObject yet :(
 func PickObject(reader io.Reader, key string, object interface{}) (err error) {
 	processToken(reader, key, func(decoder *json.Decoder) bool {
